@@ -2,7 +2,7 @@
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
 // @version      999
-// @description  读文章,看视频，做习题。
+// @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       荷包蛋。
 // @match        https://www.xuexi.cn
 // @match        https://www.xuexi.cn/*
