@@ -2,7 +2,7 @@
 // @name         强国学习
 // @namespace    雪导.
 // @version      2.1.1
-// @description  强国学习自动答题，目前实现 每日答题，每周答题，专项答题(操作方法更新为：打开答题页面后，手动刷新下自动开启)
+// @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。 强国学习自动答题，目前实现 每日答题，每周答题，专项答题(操作方法更新为：打开答题页面后，手动刷新下自动开启)
 // @author       雪导、天幽
 // @require      https://greasyfork.org/scripts/423313-utils%E7%8E%AF%E5%A2%83/code/Utils%E7%8E%AF%E5%A2%83.js?version=911306
 // @require      http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
