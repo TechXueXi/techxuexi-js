@@ -6,6 +6,8 @@
 // @author       雪导、天幽
 // @require      https://greasyfork.org/scripts/423313-utils%E7%8E%AF%E5%A2%83/code/Utils%E7%8E%AF%E5%A2%83.js?version=911306
 // @require      http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
+// @match        https://www.xuexi.cn
+// @match        https://www.xuexi.cn/*
 // @match        https://pc.xuexi.cn/points/exam-practice.html*
 // @match        https://pc.xuexi.cn/points/exam-weekly-detail.html*
 // @match        https://pc.xuexi.cn/points/exam-paper-detail.html*
