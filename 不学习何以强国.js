@@ -79,7 +79,7 @@ $(document).ready(function () {
                 createStartButton();
             }
         }, 800);
-    } else if (url == GM_getValue("readingUrl")) {
+    } else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
@@ -90,7 +90,7 @@ $(document).ready(function () {
             createTip();//创建学习提示
             reading(0);
         }
-    } else if (url == GM_getValue("watchingUrl")) {
+    } else if (typeof GM_getValue("watchingUrl") != 'object' && url == GM_getValue("watchingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
@@ -145,8 +145,8 @@ $(document).ready(function () {
     } else {
     }
 });
-
-
+ 
+ 
 //获取video标签
 function getVideoTag() {
     let iframe = document.getElementsByTagName("iframe")[0];
@@ -166,7 +166,7 @@ function getVideoTag() {
         "pauseButton": pauseButton
     }
 }
-
+ 
 //读新闻或者看视频
 //type:0为新闻，1为视频
 async function reading(type) {
@@ -382,7 +382,7 @@ async function findExamPaper() {
     console.log("正在寻找未完成的专项答题")
     while (continueFind) {
         let startTime = Date.now();
-
+ 
         await getExamPaper().then(async (data) => {
             if (data) {
                 if (examPaperTotalPageCount == null) {
@@ -411,7 +411,7 @@ async function findExamPaper() {
             } else {
                 continueFind = false;
             }
-
+ 
             //fix code = 429
             let remainms = Date.now() - startTime;
             if (remainms < ratelimitms) {
@@ -505,7 +505,7 @@ async function findExamWeekly() {
             } else {
                 continueFind = false;
             }
-
+ 
             //fix code = 429
             let remainms = Date.now() - startTime;
             if (remainms < ratelimitms) {
@@ -982,7 +982,7 @@ async function start() {
             taskProgress = await getToday();
             if (taskProgress != null) {
                 console.log("开始学习")
-
+ 
                 //检查新闻
                 if (settings[0] && taskProgress[0].currentScore != taskProgress[0].dayMaxScore) {
                     tasks[0] = false;//只要还有要做的，就当做没完成
@@ -992,7 +992,7 @@ async function start() {
                 } else {
                     tasks[0] = true;
                 }
-
+ 
                 //检查视频
                 let temp = parseInt(taskProgress[1].dayMaxScore - taskProgress[1].currentScore);
                 let temp2 = parseInt(taskProgress[3].dayMaxScore - taskProgress[3].currentScore);
@@ -1004,7 +1004,7 @@ async function start() {
                 } else {
                     tasks[1] = true;
                 }
-
+ 
                 //检查每日答题
                 if (settings[6] && taskProgress[6].currentScore != taskProgress[6].dayMaxScore) {
                     tasks[2] = false;//只要还有要做的，就当做没完成
@@ -1013,7 +1013,7 @@ async function start() {
                 } else {
                     tasks[2] = true;
                 }
-
+ 
                 //检查每周答题
                 if (settings[2] && taskProgress[2].currentScore == 0) {
                     tasks[3] = false;//只要还有要做的，就当做没完成
@@ -1026,7 +1026,7 @@ async function start() {
                 } else {
                     tasks[3] = true;
                 }
-
+ 
                 //检查专项练习
                 if (settings[5] && taskProgress[5].currentScore == 0) {
                     tasks[4] = false;//只要还有要做的，就当做没完成
@@ -1039,7 +1039,7 @@ async function start() {
                 } else {
                     tasks[4] = true;
                 }
-
+ 
                 if (tasks[0] && tasks[1] && tasks[2] && tasks[3] && tasks[4]) {
                     //如果检查都做完了，就不用继续了
                     continueToDo = false;
