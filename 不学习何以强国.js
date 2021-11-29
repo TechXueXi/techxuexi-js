@@ -79,7 +79,7 @@ $(document).ready(function () {
                 createStartButton();
             }
         }, 800);
-    } else if (url == GM_getValue("readingUrl")) {
+    } else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
@@ -90,7 +90,7 @@ $(document).ready(function () {
             createTip();//创建学习提示
             reading(0);
         }
-    } else if (url == GM_getValue("watchingUrl")) {
+    } else if (typeof GM_getValue("watchingUrl") != 'object' && url == GM_getValue("watchingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
