@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      999
+// @version      20211129
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
-// @author       荷包蛋。
+// @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
 // @match        https://www.xuexi.cn/*
 // @match        https://pc.xuexi.cn/points/exam-practice.html
