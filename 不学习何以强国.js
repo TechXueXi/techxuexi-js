@@ -589,7 +589,7 @@ async function doingExam() {
         //选项按钮
         var allbuttons = document.querySelectorAll(".q-answer");
         //获取所有填空
-        var blanks = document.querySelectorAll("input[type=text]");
+        var blanks = document.querySelectorAll("input[type=text][class=blank]");
         try {
             //获取问题类型
             var questionType = document.querySelector(".q-header").textContent;
