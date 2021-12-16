@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20211129
+// @version      20211216
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -589,7 +589,7 @@ async function doingExam() {
         //选项按钮
         var allbuttons = document.querySelectorAll(".q-answer");
         //获取所有填空
-        var blanks = document.querySelectorAll("input[type=text]");
+        var blanks = document.querySelectorAll("input[type=text][class=blank]");
         try {
             //获取问题类型
             var questionType = document.querySelector(".q-header").textContent;
