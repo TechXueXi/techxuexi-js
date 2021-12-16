@@ -4,5 +4,11 @@
     "techxuexi_js_update_log": [{
         "version": "v20211015",
         "info": "初始化仓库，优化强国学习js"
+    },{
+        "version": "v20211129",
+        "info": "处理不自动播放视频和自动答题Bug"
+    },{
+        "version": "v20211216",
+        "info": "修复？"
     }]
 }
