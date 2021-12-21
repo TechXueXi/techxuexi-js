@@ -1,5 +1,5 @@
 {
-    "techxuexi_js_version": "v20211015",
+    "techxuexi_js_version": "v20211221",
     "notice": "...",
     "techxuexi_js_update_log": [{
         "version": "v20211015",
@@ -10,5 +10,8 @@
     },{
         "version": "v20211216",
         "info": "修复？"
+    },{
+        "version": "v20211221",
+        "info": "增加倒序答题配置"
     }]
 }
