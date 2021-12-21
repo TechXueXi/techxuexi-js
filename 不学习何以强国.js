@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20211217
+// @version      20211221
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -394,10 +394,6 @@ function getExamPaperByPageNo(examPaperPageNoParam) {
     })
 }
 
-//获取专项答题列表
-function getExamPaper() {
-    return getExamPaperByPageNo(examPaperPageNo);
-}
 //查询专项答题列表看看还有没有没做过的，有则返回id
 async function findExamPaper() {
     var continueFind = true;
@@ -408,11 +404,12 @@ async function findExamPaper() {
     while (continueFind) {
         let startTime = Date.now();
 
-        await getExamPaper().then(async (data) => {
+        await getExamPaperByPageNo(examPaperPageNo).then(async (data) => {
             if (data) {
                 let examPapers = data.list;//获取专项答题的列表
                 if (examPaperReverse) {
                     // 若开启逆序答题, 则反转专项答题列表
+                    console.log("专项答题,开启逆序模式,从最早的题目开始答题");
                     examPapers.reverse();
                 }
                 for (let j = 0; j < examPapers.length; j++) {
@@ -506,10 +503,6 @@ function getExamWeeklyByPageNo(examWeeklyPageNoParam) {
     })
 }
 
-//获取每周答题列表
-function getExamWeekly() {
-    return getExamWeeklyByPageNo(examWeeklyPageNo);
-}
 //查询每周答题列表看看还有没有没做过的，有则返回id
 async function findExamWeekly() {
     var continueFind = true;
@@ -519,20 +512,19 @@ async function findExamWeekly() {
     console.log("正在寻找未完成的每周答题");
     while (continueFind) {
         let startTime = Date.now();
-        await getExamWeekly().then(async (data) => {
+        await getExamWeeklyByPageNo(examWeeklyPageNo).then(async (data) => {
             if (data) {
                 if (examWeeklyReverse) {
                     // 若开启逆序答题, 则反转列表
+                    console.log("每周答题,开启逆序模式,从最早的题目开始答题");
                     data.list.reverse();
                 }
                 for (let i = 0; i < data.list.length; i++) {
                     let examWeeks = data.list[i].practices;//获取每周的测试列表
-                    console.log("examWeeks before: ", examWeeks);
                     if (examWeeklyReverse) {
                         // 若开启逆序, 则反转每周的测试列表
                         examWeeks.reverse();
                     }
-                    console.log("examWeeks after: ", examWeeks);
                     for (let j = 0; j < examWeeks.length; j++) {
                         //遍历查询有没有没做过的
                         if (examWeeks[j].status != 2) {//status： 1为"开始答题" , 2为"重新答题"
