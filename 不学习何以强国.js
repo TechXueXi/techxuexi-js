@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20211221
+// @version      20211223
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
