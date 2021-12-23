@@ -358,8 +358,16 @@ function doExamPractice() {
     });
 }
 
+//fix code = 429
+async function waitingDependStartTime(startTime){
+    let remainms = Date.now() - startTime;
+    if (remainms < ratelimitms) {
+        await waitingTime(ratelimitms - remainms + 1000)
+    }
+}
 //初始化专项答题总页数属性
 async function InitExamPaperAttr() {
+    let startTime = Date.now();
     var data = await getExamPaperByPageNo(1); // 默认从第一页获取全部页属性
     if (data) {
         // 初始化总页码
@@ -369,6 +377,7 @@ async function InitExamPaperAttr() {
             examPaperPageNo = examPaperTotalPageCount;
         }
     }
+    await waitingDependStartTime(startTime);
 }
 
 //获取指定页数的专项答题列表
@@ -435,16 +444,13 @@ async function findExamPaper() {
             } else {
                 continueFind = false;
             }
-
             //fix code = 429
-            let remainms = Date.now() - startTime;
-            if (remainms < ratelimitms) {
-                await waitingTime(ratelimitms - remainms + 1000)
-            }
+            await waitingDependStartTime(startTime);
         })
     }
     return examPaperId;
 }
+
 //做专项答题
 function doExamPaper() {
     return new Promise(function (resolve) {
@@ -469,6 +475,7 @@ function doExamPaper() {
 
 //初始化每周答题总页数属性
 async function InitExamWeeklyAttr() {
+    let startTime = Date.now();
     var data = await getExamWeeklyByPageNo(1); // 默认从第一页获取全部页属性
     if (data) {
         // 初始化总页码
@@ -478,6 +485,7 @@ async function InitExamWeeklyAttr() {
             examWeeklyPageNo = examWeeklyTotalPageCount;
         }
     }
+    await waitingDependStartTime(startTime);
 }
 
 //获取指定页数的每周答题列表
@@ -555,10 +563,7 @@ async function findExamWeekly() {
             }
 
             //fix code = 429
-            let remainms = Date.now() - startTime;
-            if (remainms < ratelimitms) {
-                await waitingTime(ratelimitms - remainms + 1000)
-            }
+            await waitingDependStartTime(startTime);
         })
     }
     return examWeeklyId;
