@@ -32,7 +32,7 @@ body:
     attributes:
       label: 软件/源码版本
       description: js文件的“// @version      20211223”是版本号
-      placeholder: 20211223
+      placeholder: "20211223"
     validations:
       required: true
   - type: input
