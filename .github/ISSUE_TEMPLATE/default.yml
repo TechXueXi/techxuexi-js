@@ -39,8 +39,8 @@ body:
     id: sys-version
     attributes:
       label: 系统版本，包含位数
-      description: 如 windows x64 , centos x64，debain arm32
-      placeholder: windows x64
+      description: 如 windows7 x64 , centos7.8 x64
+      placeholder: windows7 x64
     validations:
       required: true
   - type: input
