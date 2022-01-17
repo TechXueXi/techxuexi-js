@@ -18,4 +18,13 @@
 
 装个浏览器插件 tampermonkey （网上很多教程），点击插件里添加按钮，去掉编辑框里原来的代码，把 不学习何以强国 js 脚本复制粘贴进编辑框保存。开启这个脚本，然后进入网页强国 www.xuexi.cn 登录，刷新登录网页，左上角有启动按钮。
 
+### 如何设置自动升级？
+
+看图：
+
+![image](https://user-images.githubusercontent.com/86897692/149704031-d69cc183-ff29-40a0-94d4-a74f1d2a0edc.png)
+
+![image](https://user-images.githubusercontent.com/86897692/149704044-2fb0c908-c312-42a1-9b14-1a71411b54fe.png)
+
+
 ## 不想每天开电脑学习，可以配置 techxuexi python 在服务器。  https://github.com/TechXueXi/TechXueXi
