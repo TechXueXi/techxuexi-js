@@ -1,7 +1,10 @@
 {
-    "techxuexi_js_version": "v20211223",
+    "techxuexi_js_version": "v20220121",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220121",
+        "info": "替换被墙的链接"
+    },{
         "version": "v20211015",
         "info": "初始化仓库，优化强国学习js"
     },{
