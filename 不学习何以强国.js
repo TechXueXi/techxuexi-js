@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20220121
+// @version      20220125
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -71,6 +71,19 @@ var examPaperTotalPageCount = null;
 var examPaperReverse = false;
 //每周答题，专项答题 请求rate 限制 每 3000ms 一次
 const ratelimitms = 3000;
+
+//默认情况下, chrome 只允许 window.close 关闭 window.open 打开的窗口,所以我们就要用window.open命令,在原地网页打开自身窗口再关上,就可以成功关闭了
+function closeWin() {
+    try {
+         window.opener = window;
+         var win = window.open("","_self");
+         win.close();
+         top.close();
+    } catch (e) {
+        }
+
+}
+
 $(document).ready(function () {
     let url = window.location.href;
     if (url == "https://www.xuexi.cn" || url == "https://www.xuexi.cn/" || url == "https://www.xuexi.cn/index.html") {
@@ -205,7 +218,7 @@ async function reading(type) {
                 GM_setValue('watchingUrl', null);
             }
             clearInterval(readingInterval);
-            window.close();
+            closeWin();
         }
     }, 1000);
     //关闭文章或视频页面
@@ -824,7 +837,7 @@ async function doingExam() {
             break;
         }
     }
-    window.close();
+    closeWin();
 }
 //获取关键字
 function getKey() {
