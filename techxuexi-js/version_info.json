@@ -1,7 +1,10 @@
 {
-    "techxuexi_js_version": "v20220121",
+    "techxuexi_js_version": "v20220125",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220125",
+        "info": "适配 Kiwi Browser安卓浏览器"
+    },{
         "version": "v20220121",
         "info": "替换被墙的链接"
     },{
