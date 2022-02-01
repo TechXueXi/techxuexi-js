@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20220125
+// @version      20220201
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -11,8 +11,8 @@
 // @match        https://pc.xuexi.cn/points/exam-weekly-list.html
 // @match        https://pc.xuexi.cn/points/exam-paper-detail.html?id=*
 // @match        https://pc.xuexi.cn/points/exam-paper-list.html
-// @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.9.0/js/md5.min.js
+// @require      https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js
+// @require      https://cdn.jsdelivr.net/npm/blueimp-md5@2.9.0
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue
