@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20220201
+// @version      20220205
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -169,7 +169,7 @@ function getVideoTag() {
     let iframe = document.getElementsByTagName("iframe")[0];
     let video = null;
     let pauseButton = null;
-    if (iframe) {
+    if (iframe.innerHTML) {
         //如果有iframe,说明外面的video标签是假的
         video = iframe.contentWindow.document.getElementsByTagName("video")[0];
         pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
