@@ -1,7 +1,10 @@
 {
-    "techxuexi_js_version": "v20220205",
+    "techxuexi_js_version": "v20220206",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220206",
+        "info": "修复无法关闭视频"
+    },{
         "version": "v20220205",
         "info": "修复 视频学习不会自动关闭"
     },{
