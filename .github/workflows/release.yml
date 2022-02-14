@@ -15,7 +15,7 @@ on:
       techxuexi_text:
         description: ''
         required: true
-        default: '交流群： https://github.com/TechXueXi/TechXueXi/issues/14 ，使用方法：https://github.com/TechXueXi/techxuexi-js'
+        default: '更新日志请查看 https://github.com/TechXueXi/techxuexi-js/blob/main/techxuexi-js/version_info.json 交流群： https://github.com/TechXueXi/TechXueXi/issues/14 ，使用方法：https://github.com/TechXueXi/techxuexi-js'
   
 
 jobs:
