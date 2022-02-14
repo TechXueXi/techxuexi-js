@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         不学习何以强国-beta
 // @namespace    http://tampermonkey.net/
-// @version      20220206
+// @version      20220214
 // @description  问题反馈位置： https://github.com/TechXueXi/techxuexi-js/issues 。读文章,看视频，做习题。
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
@@ -206,7 +206,12 @@ function getVideoTag() {
 //type:0为新闻，1为视频
 async function reading(type) {
     //看文章或者视频
-    let time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面
+    var time=1;
+if (type == 0) {
+    time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面，看文章
+} else {
+    time = parseInt(Math.random() * (250 - 230 + 1) + 230, 10);//230-250秒后关闭页面，看视频
+}
     let firstTime = time - 2;
     let secendTime = 12;
     let scrollLength = document.body.scrollHeight / 2;
