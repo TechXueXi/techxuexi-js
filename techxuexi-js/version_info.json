@@ -1,7 +1,10 @@
 {
-    "techxuexi_js_version": "v20220206",
+    "techxuexi_js_version": "v20220214",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220214",
+        "info": "修复因为视频学习的时长不够导致的问题"
+    },{
         "version": "v20220206",
         "info": "修复无法关闭视频"
     },{
