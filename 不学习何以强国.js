@@ -171,7 +171,7 @@ function getVideoTag() {
     let pauseButton = null;
     var u = navigator.userAgent;
     if(u.indexOf('Mac') > -1){//Mac
-    if (iframe.innerHTML) {
+    if (iframe&&iframe.innerHTML) {
         //如果有iframe,说明外面的video标签是假的
         video = iframe.contentWindow.document.getElementsByTagName("video")[0];
         pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
