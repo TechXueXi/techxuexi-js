@@ -1,7 +1,10 @@
 {
-    "techxuexi_js_version": "v20220214",
+    "techxuexi_js_version": "v20220329",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220329",
+        "info": "修复视频播放一直正在初始化的问题"
+    },{
         "version": "v20220214",
         "info": "修复因为视频学习的时长不够导致的问题"
     },{
