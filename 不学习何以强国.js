@@ -93,6 +93,25 @@ function closeWin() {
 
 }
 
+/**
+ * 随机等待最小到最大之间几秒, 需要await
+ * @param {number} minSecond 最短时长
+ * @param {number} MaxSecond 最长时长
+ * @returns Promise
+ */
+function waitRandomBetween(minSecond=2,MaxSecond=5){
+    if(MaxSecond<=minSecond){
+        MaxSecond=minSecond+3
+    }
+    let waitTime = Math.random() * (MaxSecond - minSecond) + minSecond
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            console.log(`随机等待${waitTime}秒`)
+            resolve()
+        },waitTime*1000)
+    })
+}
+
 $(document).ready(function () {
     let url = window.location.href;
     if (url == "https://www.xuexi.cn" || url == "https://www.xuexi.cn/" || url == "https://www.xuexi.cn/index.html") {
@@ -294,7 +313,7 @@ async function readNews() {
         console.log("正在看第" + (i + 1) + "个新闻");
         let newPage = GM_openInTab(news[i].url, { active: true, insert: true, setParent: true });
         await waitingClose(newPage);
-        await waitingTime(1500);
+        await waitRandomBetween(1,3);
     }
 }
 //获取新闻列表
@@ -386,7 +405,7 @@ async function watchVideo() {
         console.log("正在观看第" + (i + 1) + "个视频");
         let newPage = GM_openInTab(videos[i].url, { active: true, insert: true, setParent: true })
         await waitingClose(newPage);
-        await waitingTime(1500);
+        await waitRandomBetween(1,3);
     }
 }
 //做每日答题
@@ -407,7 +426,8 @@ function doExamPractice() {
 async function waitingDependStartTime(startTime){
     let remainms = Date.now() - startTime;
     if (remainms < ratelimitms) {
-        await waitingTime(ratelimitms - remainms + 1000)
+        let second = (ratelimitms - remainms)/1000 
+        await waitRandomBetween(second+1 ,second+3)
     }
 }
 //初始化专项答题总页数属性
@@ -670,7 +690,7 @@ async function doingExam() {
     let shouldSaveAnswer = false;
     while (true) {
         //先等等再开始做题
-        await waitingTime(2500);
+        await waitRandomBetween(2,5);
         await doingPause();
         nextButton = await getNextButton();
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
@@ -683,7 +703,7 @@ async function doingExam() {
         }
         //所有提示
         var allTips = document.querySelectorAll("font[color=red]");
-        await waitingTime(1500);
+        await waitRandomBetween(2,3);
         //选项按钮
         var allbuttons = document.querySelectorAll(".q-answer");
         //获取所有填空
@@ -934,17 +954,6 @@ function cancelVerify() {
     } catch (e) {
         console.log("去除验证失败");
     }
-}
-//等待时间工具函数
-function waitingTime(time) {
-    if (!Number.isInteger(time)) {
-        time = 1000;
-    }
-    return new Promise(resolve => {
-        setTimeout(function () {
-            resolve('done');
-        }, time);
-    });
 }
 //查询今日完成情况
 function getToday() {
