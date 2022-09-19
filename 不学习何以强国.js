@@ -56,14 +56,14 @@ var videoNum = 6;
 var videos = [];
 //配置
 var settings = {};
-var settingsDefault={
-    News:true, //0
-    Video:true,//1
-    ExamPractice:true, //6 每日答题
-    ExamWeekly:true,//2 每周答题
-    ExamPaper:true,//5 专项练习
-    ShowMenu:false, //7 隐藏菜单
-    AutoStart:false, //是否加载脚本后自动播放
+var settingsDefault = {
+    News: true, //0
+    Video: true,//1
+    ExamPractice: true, //6 每日答题
+    ExamWeekly: true,//2 每周答题
+    ExamPaper: true,//5 专项练习
+    ShowMenu: false, //7 隐藏菜单
+    AutoStart: false, //是否加载脚本后自动播放
 }
 var pause = false;//是否暂停答题
 //每周答题当前页码
@@ -84,12 +84,12 @@ const ratelimitms = 3000;
 //默认情况下, chrome 只允许 window.close 关闭 window.open 打开的窗口,所以我们就要用window.open命令,在原地网页打开自身窗口再关上,就可以成功关闭了
 function closeWin() {
     try {
-         window.opener = window;
-         var win = window.open("","_self");
-         win.close();
-         top.close();
+        window.opener = window;
+        var win = window.open("", "_self");
+        win.close();
+        top.close();
     } catch (e) {
-        }
+    }
 
 }
 
@@ -99,16 +99,16 @@ function closeWin() {
  * @param {number} MaxSecond 最长时长
  * @returns Promise
  */
-function waitRandomBetween(minSecond=2,MaxSecond=5){
-    if(MaxSecond<=minSecond){
-        MaxSecond=minSecond+3
+function waitRandomBetween(minSecond = 2, MaxSecond = 5) {
+    if (MaxSecond <= minSecond) {
+        MaxSecond = minSecond + 3
     }
     let waitTime = Math.random() * (MaxSecond - minSecond) + minSecond
-    return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
             console.log(`随机等待${waitTime}秒`)
             resolve()
-        },waitTime*1000)
+        }, waitTime * 1000)
     })
 }
 
@@ -198,35 +198,35 @@ function getVideoTag() {
     let video = null;
     let pauseButton = null;
     var u = navigator.userAgent;
-    if(u.indexOf('Mac') > -1){//Mac
-    if (iframe != null && iframe.innerHTML) {
-        //如果有iframe,说明外面的video标签是假的
-        video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-        pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-    } else {
-        //否则这个video标签是真的
-        video = document.getElementsByTagName("video")[0];
-        pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+    if (u.indexOf('Mac') > -1) {//Mac
+        if (iframe != null && iframe.innerHTML) {
+            //如果有iframe,说明外面的video标签是假的
+            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+        } else {
+            //否则这个video标签是真的
+            video = document.getElementsByTagName("video")[0];
+            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+        }
+        return {
+            "video": video,
+            "pauseButton": pauseButton
+        }
     }
-    return {
-        "video": video,
-        "pauseButton": pauseButton
-    }
-    }
-    else{
-    if (iframe) {
-        //如果有iframe,说明外面的video标签是假的
-        video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-        pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-    } else {
-        //否则这个video标签是真的
-        video = document.getElementsByTagName("video")[0];
-        pauseButton = document.getElementsByClassName("prism-play-btn")[0];
-    }
-    return {
-        "video": video,
-        "pauseButton": pauseButton
-    }
+    else {
+        if (iframe) {
+            //如果有iframe,说明外面的video标签是假的
+            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+        } else {
+            //否则这个video标签是真的
+            video = document.getElementsByTagName("video")[0];
+            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+        }
+        return {
+            "video": video,
+            "pauseButton": pauseButton
+        }
     }
 }
 
@@ -234,12 +234,12 @@ function getVideoTag() {
 //type:0为新闻，1为视频
 async function reading(type) {
     //看文章或者视频
-    var time=1;
-if (type == 0) {
-    time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面，看文章
-} else {
-    time = parseInt(Math.random() * (250 - 230 + 1) + 230, 10);//230-250秒后关闭页面，看视频
-}
+    var time = 1;
+    if (type == 0) {
+        time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面，看文章
+    } else {
+        time = parseInt(Math.random() * (250 - 230 + 1) + 230, 10);//230-250秒后关闭页面，看视频
+    }
     let firstTime = time - 2;
     let secendTime = 12;
     let scrollLength = document.body.scrollHeight / 2;
@@ -313,7 +313,7 @@ async function readNews() {
         console.log("正在看第" + (i + 1) + "个新闻");
         let newPage = GM_openInTab(news[i].url, { active: true, insert: true, setParent: true });
         await waitingClose(newPage);
-        await waitRandomBetween(1,3);
+        await waitRandomBetween(1, 3);
     }
 }
 //获取新闻列表
@@ -405,7 +405,7 @@ async function watchVideo() {
         console.log("正在观看第" + (i + 1) + "个视频");
         let newPage = GM_openInTab(videos[i].url, { active: true, insert: true, setParent: true })
         await waitingClose(newPage);
-        await waitRandomBetween(1,3);
+        await waitRandomBetween(1, 3);
     }
 }
 //做每日答题
@@ -423,11 +423,11 @@ function doExamPractice() {
 }
 
 //fix code = 429
-async function waitingDependStartTime(startTime){
+async function waitingDependStartTime(startTime) {
     let remainms = Date.now() - startTime;
     if (remainms < ratelimitms) {
-        let second = (ratelimitms - remainms)/1000 
-        await waitRandomBetween(second+1 ,second+3)
+        let second = (ratelimitms - remainms) / 1000
+        await waitRandomBetween(second + 1, second + 3)
     }
 }
 //初始化专项答题总页数属性
@@ -690,7 +690,7 @@ async function doingExam() {
     let shouldSaveAnswer = false;
     while (true) {
         //先等等再开始做题
-        await waitRandomBetween(2,5);
+        await waitRandomBetween(2, 5);
         await doingPause();
         nextButton = await getNextButton();
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
@@ -703,7 +703,7 @@ async function doingExam() {
         }
         //所有提示
         var allTips = document.querySelectorAll("font[color=red]");
-        await waitRandomBetween(2,3);
+        await waitRandomBetween(2, 3);
         //选项按钮
         var allbuttons = document.querySelectorAll(".q-answer");
         //获取所有填空
@@ -1026,10 +1026,10 @@ function clickManualButton() {
 function createStartButton() {
     let base = document.createElement("div");
     var baseInfo = "";
-    baseInfo += "<form id=\"settingData\" class=\"egg_menu\" action=\"\" target=\"_blank\" onsubmit=\"return false\"><div class=\"egg_setting_box\"><div class=\"egg_setting_item\"><label>新闻<\/label><input class=\"egg_setting_switch\" type=\"checkbox\" name=\"News\" " + (settings.News ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>视频<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"Video\" " + (settings.Video? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每日答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPractice\" " + (settings.ExamPractice ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每周答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamWeekly\" " + (settings.ExamWeekly ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>专项练习<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPaper\" " + (settings.ExamPaper ? 'checked' : '') + "\/><\/div><hr \/><div title='Tip:开始学习后，隐藏相关页面和提示（不隐藏答题中的关闭自动答题按钮）' class=\"egg_setting_item\"> <label>运行隐藏<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ShowMenu\"" + (settings.ShowMenu ? 'checked' : '') + "/></div>"+
-    "<div title='Tip:进入学习首页5秒后自动开始学习' class=\"egg_setting_item\"> <label>自动开始<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"AutoStart\"" + (settings.AutoStart ? 'checked' : '') + "/></div>"
-    +
-    "<a style=\"text-decoration: none;\" title=\"视频不自动播放？点此查看解决办法\" target=\"blank\" href=\"https://docs.qq.com/doc/DZllGcGlJUG1qT3Vx\"><div style=\"color:#5F5F5F;font-size:14px;\" class=\"egg_setting_item\"><label style=\"cursor: pointer;\">视频不自动播放?<\/label><\/div><\/a><\/div><\/form>";
+    baseInfo += "<form id=\"settingData\" class=\"egg_menu\" action=\"\" target=\"_blank\" onsubmit=\"return false\"><div class=\"egg_setting_box\"><div class=\"egg_setting_item\"><label>新闻<\/label><input class=\"egg_setting_switch\" type=\"checkbox\" name=\"News\" " + (settings.News ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>视频<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"Video\" " + (settings.Video ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每日答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPractice\" " + (settings.ExamPractice ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每周答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamWeekly\" " + (settings.ExamWeekly ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>专项练习<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPaper\" " + (settings.ExamPaper ? 'checked' : '') + "\/><\/div><hr \/><div title='Tip:开始学习后，隐藏相关页面和提示（不隐藏答题中的关闭自动答题按钮）' class=\"egg_setting_item\"> <label>运行隐藏<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ShowMenu\"" + (settings.ShowMenu ? 'checked' : '') + "/></div>" +
+        "<div title='Tip:进入学习首页5秒后自动开始学习' class=\"egg_setting_item\"> <label>自动开始<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"AutoStart\"" + (settings.AutoStart ? 'checked' : '') + "/></div>"
+        +
+        "<a style=\"text-decoration: none;\" title=\"视频不自动播放？点此查看解决办法\" target=\"blank\" href=\"https://docs.qq.com/doc/DZllGcGlJUG1qT3Vx\"><div style=\"color:#5F5F5F;font-size:14px;\" class=\"egg_setting_item\"><label style=\"cursor: pointer;\">视频不自动播放?<\/label><\/div><\/a><\/div><\/form>";
     base.innerHTML = baseInfo;
     let body = document.getElementsByTagName("body")[0];
     body.append(base)
@@ -1050,12 +1050,12 @@ function createStartButton() {
     //插入节点
     body.append(startButton)
 
-    if(settings.AutoStart){
-        setTimeout(()=>{
-            if(startButton.innerText === "开始学习"){
+    if (settings.AutoStart) {
+        setTimeout(() => {
+            if (startButton.innerText === "开始学习") {
                 start()
             }
-        },5000)
+        }, 5000)
     }
 }
 //保存配置
@@ -1063,7 +1063,7 @@ function saveSetting() {
     let form = document.getElementById("settingData");
     let formData = new FormData(form);
     settings.News = (formData.get('News') != null);
-    settings.Video= (formData.get('Video') != null);
+    settings.Video = (formData.get('Video') != null);
     settings.ExamPractice = (formData.get('ExamPractice') != null);
     settings.ExamWeekly = (formData.get('ExamWeekly') != null);
     settings.ExamPaper = (formData.get('ExamPaper') != null);
@@ -1177,8 +1177,12 @@ async function start() {
             showMenu()
         }
     } else {
-        //提醒登录
-        alert("请先登录");
+        //提醒登录 
+        // alert("请先登录");
+        
+        //修改为跳转到登陆页
+        let loggedButton = document.querySelectorAll("a[class='icon login-icon']")[0];
+        loggedButton.click()
     }
     return false;
 }
