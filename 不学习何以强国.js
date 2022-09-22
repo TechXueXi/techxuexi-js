@@ -6,6 +6,7 @@
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
 // @match        https://www.xuexi.cn/*
+// @match        https://pc.xuexi.cn/points/login.html*
 // @match        https://pc.xuexi.cn/points/exam-practice.html
 // @match        https://pc.xuexi.cn/points/exam-weekly-detail.html?id=*
 // @match        https://pc.xuexi.cn/points/exam-weekly-list.html
@@ -103,12 +104,13 @@ function waitRandomBetween(minSecond = 2, MaxSecond = 5) {
     if (MaxSecond <= minSecond) {
         MaxSecond = minSecond + 3
     }
-    let waitTime = Math.random() * (MaxSecond - minSecond) + minSecond
+
+    let waitTime = Math.floor(Math.random() * (MaxSecond * 1000 - minSecond * 1000) + minSecond * 1000)
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            console.log(`随机等待${waitTime}秒`)
+            console.log(`随机等待${waitTime / 1000}秒`)
             resolve()
-        }, waitTime * 1000)
+        }, waitTime)
     })
 }
 
@@ -124,7 +126,13 @@ $(document).ready(function () {
                 createStartButton();
             }
         }, 800);
-    } else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
+    } else if (url.indexOf("login.html") !== -1) {
+        console.log("检测到登录页")
+        setTimeout(() => {
+            window.scrollTo(0, 1000);
+        }, 500);
+    }
+    else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
@@ -1179,10 +1187,13 @@ async function start() {
     } else {
         //提醒登录 
         // alert("请先登录");
-        
+
         //修改为跳转到登陆页
         let loggedButton = document.querySelectorAll("a[class='icon login-icon']")[0];
         loggedButton.click()
+        setTimeout(() => {
+            closeWin()
+        }, 2000);
     }
     return false;
 }
