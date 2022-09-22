@@ -2,6 +2,9 @@
     "techxuexi_js_version": "v20220329",
     "notice": "...",
     "techxuexi_js_update_log": [{
+        "version": "v20220922",
+        "info": "添加自动开始学习，未登陆则会跳转到登录页"
+    },{
         "version": "v20220329",
         "info": "修复视频播放一直正在初始化的问题"
     },{

@@ -6,6 +6,7 @@
 // @author       techxuexi ，荷包蛋。
 // @match        https://www.xuexi.cn
 // @match        https://www.xuexi.cn/*
+// @match        https://pc.xuexi.cn/points/login.html*
 // @match        https://pc.xuexi.cn/points/exam-practice.html
 // @match        https://pc.xuexi.cn/points/exam-weekly-detail.html?id=*
 // @match        https://pc.xuexi.cn/points/exam-weekly-list.html
@@ -55,7 +56,16 @@ var news = [];
 var videoNum = 6;
 var videos = [];
 //配置
-var settings = [];
+var settings = {};
+var settingsDefault = {
+    News: true, //0
+    Video: true,//1
+    ExamPractice: true, //6 每日答题
+    ExamWeekly: true,//2 每周答题
+    ExamPaper: true,//5 专项练习
+    ShowMenu: false, //7 隐藏菜单
+    AutoStart: false, //是否加载脚本后自动播放
+}
 var pause = false;//是否暂停答题
 //每周答题当前页码
 var examWeeklyPageNo = 1;
@@ -75,13 +85,33 @@ const ratelimitms = 3000;
 //默认情况下, chrome 只允许 window.close 关闭 window.open 打开的窗口,所以我们就要用window.open命令,在原地网页打开自身窗口再关上,就可以成功关闭了
 function closeWin() {
     try {
-         window.opener = window;
-         var win = window.open("","_self");
-         win.close();
-         top.close();
+        window.opener = window;
+        var win = window.open("", "_self");
+        win.close();
+        top.close();
     } catch (e) {
-        }
+    }
 
+}
+
+/**
+ * 随机等待最小到最大之间几秒, 需要await
+ * @param {number} minSecond 最短时长
+ * @param {number} MaxSecond 最长时长
+ * @returns Promise
+ */
+function waitRandomBetween(minSecond = 2, MaxSecond = 5) {
+    if (MaxSecond <= minSecond) {
+        MaxSecond = minSecond + 3
+    }
+
+    let waitTime = Math.floor(Math.random() * (MaxSecond * 1000 - minSecond * 1000) + minSecond * 1000)
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(`随机等待${waitTime / 1000}秒`)
+            resolve()
+        }, waitTime)
+    })
 }
 
 $(document).ready(function () {
@@ -96,7 +126,13 @@ $(document).ready(function () {
                 createStartButton();
             }
         }, 800);
-    } else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
+    } else if (url.indexOf("login.html") !== -1) {
+        console.log("检测到登录页")
+        setTimeout(() => {
+            window.scrollTo(0, 1000);
+        }, 500);
+    }
+    else if (typeof GM_getValue("readingUrl") != 'object' && url == GM_getValue("readingUrl")) {
         try {
             let settingTemp = JSON.parse(GM_getValue('studySetting'));
             if (!settingTemp[7]) {
@@ -170,35 +206,35 @@ function getVideoTag() {
     let video = null;
     let pauseButton = null;
     var u = navigator.userAgent;
-    if(u.indexOf('Mac') > -1){//Mac
-    if (iframe != null && iframe.innerHTML) {
-        //如果有iframe,说明外面的video标签是假的
-        video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-        pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-    } else {
-        //否则这个video标签是真的
-        video = document.getElementsByTagName("video")[0];
-        pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+    if (u.indexOf('Mac') > -1) {//Mac
+        if (iframe != null && iframe.innerHTML) {
+            //如果有iframe,说明外面的video标签是假的
+            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+        } else {
+            //否则这个video标签是真的
+            video = document.getElementsByTagName("video")[0];
+            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+        }
+        return {
+            "video": video,
+            "pauseButton": pauseButton
+        }
     }
-    return {
-        "video": video,
-        "pauseButton": pauseButton
-    }
-    }
-    else{
-    if (iframe) {
-        //如果有iframe,说明外面的video标签是假的
-        video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-        pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-    } else {
-        //否则这个video标签是真的
-        video = document.getElementsByTagName("video")[0];
-        pauseButton = document.getElementsByClassName("prism-play-btn")[0];
-    }
-    return {
-        "video": video,
-        "pauseButton": pauseButton
-    }
+    else {
+        if (iframe) {
+            //如果有iframe,说明外面的video标签是假的
+            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+        } else {
+            //否则这个video标签是真的
+            video = document.getElementsByTagName("video")[0];
+            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+        }
+        return {
+            "video": video,
+            "pauseButton": pauseButton
+        }
     }
 }
 
@@ -206,12 +242,12 @@ function getVideoTag() {
 //type:0为新闻，1为视频
 async function reading(type) {
     //看文章或者视频
-    var time=1;
-if (type == 0) {
-    time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面，看文章
-} else {
-    time = parseInt(Math.random() * (250 - 230 + 1) + 230, 10);//230-250秒后关闭页面，看视频
-}
+    var time = 1;
+    if (type == 0) {
+        time = parseInt(Math.random() * (100 - 80 + 1) + 80, 10);//80-100秒后关闭页面，看文章
+    } else {
+        time = parseInt(Math.random() * (250 - 230 + 1) + 230, 10);//230-250秒后关闭页面，看视频
+    }
     let firstTime = time - 2;
     let secendTime = 12;
     let scrollLength = document.body.scrollHeight / 2;
@@ -285,7 +321,7 @@ async function readNews() {
         console.log("正在看第" + (i + 1) + "个新闻");
         let newPage = GM_openInTab(news[i].url, { active: true, insert: true, setParent: true });
         await waitingClose(newPage);
-        await waitingTime(1500);
+        await waitRandomBetween(1, 3);
     }
 }
 //获取新闻列表
@@ -377,7 +413,7 @@ async function watchVideo() {
         console.log("正在观看第" + (i + 1) + "个视频");
         let newPage = GM_openInTab(videos[i].url, { active: true, insert: true, setParent: true })
         await waitingClose(newPage);
-        await waitingTime(1500);
+        await waitRandomBetween(1, 3);
     }
 }
 //做每日答题
@@ -395,10 +431,11 @@ function doExamPractice() {
 }
 
 //fix code = 429
-async function waitingDependStartTime(startTime){
+async function waitingDependStartTime(startTime) {
     let remainms = Date.now() - startTime;
     if (remainms < ratelimitms) {
-        await waitingTime(ratelimitms - remainms + 1000)
+        let second = (ratelimitms - remainms) / 1000
+        await waitRandomBetween(second + 1, second + 3)
     }
 }
 //初始化专项答题总页数属性
@@ -661,7 +698,7 @@ async function doingExam() {
     let shouldSaveAnswer = false;
     while (true) {
         //先等等再开始做题
-        await waitingTime(2500);
+        await waitRandomBetween(2, 5);
         await doingPause();
         nextButton = await getNextButton();
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
@@ -674,7 +711,7 @@ async function doingExam() {
         }
         //所有提示
         var allTips = document.querySelectorAll("font[color=red]");
-        await waitingTime(1500);
+        await waitRandomBetween(2, 3);
         //选项按钮
         var allbuttons = document.querySelectorAll(".q-answer");
         //获取所有填空
@@ -926,17 +963,6 @@ function cancelVerify() {
         console.log("去除验证失败");
     }
 }
-//等待时间工具函数
-function waitingTime(time) {
-    if (!Number.isInteger(time)) {
-        time = 1000;
-    }
-    return new Promise(resolve => {
-        setTimeout(function () {
-            resolve('done');
-        }, time);
-    });
-}
 //查询今日完成情况
 function getToday() {
     return new Promise(function (resolve) {
@@ -960,14 +986,15 @@ function getToday() {
 function initSetting() {
     try {
         let settingTemp = JSON.parse(GM_getValue('studySetting'));
-        if (settingTemp != null) {
+        if (settingTemp != null && Object.prototype.toString.call(settingTemp) === '[object Object]') {
+            // 增加判断是否为旧数组类型缓存
             settings = settingTemp;
         } else {
-            settings = [true, true, true, true, true, true, true, false];
+            settings = JSON.parse(JSON.stringify(settingsDefault));
         }
     } catch (e) {
         //没有则直接初始化
-        settings = [true, true, true, true, true, true, true, false];
+        settings = JSON.parse(JSON.stringify(settingsDefault));
     }
 }
 //创建“手动答题”按钮
@@ -1007,7 +1034,10 @@ function clickManualButton() {
 function createStartButton() {
     let base = document.createElement("div");
     var baseInfo = "";
-    baseInfo += "<form id=\"settingData\" class=\"egg_menu\" action=\"\" target=\"_blank\" onsubmit=\"return false\"><div class=\"egg_setting_box\"><div class=\"egg_setting_item\"><label>新闻<\/label><input class=\"egg_setting_switch\" type=\"checkbox\" name=\"0\" " + (settings[0] ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>视频<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"1\" " + (settings[1] ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每日答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"6\" " + (settings[6] ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每周答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"2\" " + (settings[2] ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>专项练习<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"5\" " + (settings[5] ? 'checked' : '') + "\/><\/div><hr \/><div title='Tip:开始学习后，隐藏相关页面和提示（不隐藏答题中的关闭自动答题按钮）' class=\"egg_setting_item\"> <label>运行隐藏<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"7\"" + (settings[7] ? 'checked' : '') + "/></div><a style=\"text-decoration: none;\" title=\"视频不自动播放？点此查看解决办法\" target=\"blank\" href=\"https://docs.qq.com/doc/DZllGcGlJUG1qT3Vx\"><div style=\"color:#5F5F5F;font-size:14px;\" class=\"egg_setting_item\"><label style=\"cursor: pointer;\">视频不自动播放?<\/label><\/div><\/a><\/div><\/form>";
+    baseInfo += "<form id=\"settingData\" class=\"egg_menu\" action=\"\" target=\"_blank\" onsubmit=\"return false\"><div class=\"egg_setting_box\"><div class=\"egg_setting_item\"><label>新闻<\/label><input class=\"egg_setting_switch\" type=\"checkbox\" name=\"News\" " + (settings.News ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>视频<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"Video\" " + (settings.Video ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每日答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPractice\" " + (settings.ExamPractice ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>每周答题<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamWeekly\" " + (settings.ExamWeekly ? 'checked' : '') + "\/>				<\/div>				<div class=\"egg_setting_item\">					<label>专项练习<\/label>					<input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ExamPaper\" " + (settings.ExamPaper ? 'checked' : '') + "\/><\/div><hr \/><div title='Tip:开始学习后，隐藏相关页面和提示（不隐藏答题中的关闭自动答题按钮）' class=\"egg_setting_item\"> <label>运行隐藏<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"ShowMenu\"" + (settings.ShowMenu ? 'checked' : '') + "/></div>" +
+        "<div title='Tip:进入学习首页5秒后自动开始学习' class=\"egg_setting_item\"> <label>自动开始<\/label> <input class=\"egg_setting_switch\" type=\"checkbox\" name=\"AutoStart\"" + (settings.AutoStart ? 'checked' : '') + "/></div>"
+        +
+        "<a style=\"text-decoration: none;\" title=\"视频不自动播放？点此查看解决办法\" target=\"blank\" href=\"https://docs.qq.com/doc/DZllGcGlJUG1qT3Vx\"><div style=\"color:#5F5F5F;font-size:14px;\" class=\"egg_setting_item\"><label style=\"cursor: pointer;\">视频不自动播放?<\/label><\/div><\/a><\/div><\/form>";
     base.innerHTML = baseInfo;
     let body = document.getElementsByTagName("body")[0];
     body.append(base)
@@ -1027,17 +1057,26 @@ function createStartButton() {
     }
     //插入节点
     body.append(startButton)
+
+    if (settings.AutoStart) {
+        setTimeout(() => {
+            if (startButton.innerText === "开始学习") {
+                start()
+            }
+        }, 5000)
+    }
 }
 //保存配置
 function saveSetting() {
     let form = document.getElementById("settingData");
     let formData = new FormData(form);
-    settings[0] = (formData.get('0') != null);
-    settings[1] = (formData.get('1') != null);
-    settings[6] = (formData.get('6') != null);
-    settings[2] = (formData.get('2') != null);
-    settings[5] = (formData.get('5') != null);
-    settings[7] = (formData.get('7') != null);//运行时是否要隐藏
+    settings.News = (formData.get('News') != null);
+    settings.Video = (formData.get('Video') != null);
+    settings.ExamPractice = (formData.get('ExamPractice') != null);
+    settings.ExamWeekly = (formData.get('ExamWeekly') != null);
+    settings.ExamPaper = (formData.get('ExamPaper') != null);
+    settings.ShowMenu = (formData.get('ShowMenu') != null);//运行时是否要隐藏
+    settings.AutoStart = (formData.get('AutoStart') != null);//是否自动启动
     GM_setValue('studySetting', JSON.stringify(settings));
 }
 //是否显示目录
@@ -1059,7 +1098,7 @@ async function start() {
         startButton.innerText = "正在学习";
         startButton.style.cursor = "default";
         startButton.setAttribute("disabled", true);
-        if (settings[7]) {
+        if (settings.ShowMenu) {
             showMenu(false);
         }
         let taskProgress = null;
@@ -1073,7 +1112,7 @@ async function start() {
                 console.log("开始学习")
 
                 //检查新闻
-                if (settings[0] && taskProgress[0].currentScore != taskProgress[0].dayMaxScore) {
+                if (settings.News && taskProgress[0].currentScore != taskProgress[0].dayMaxScore) {
                     tasks[0] = false;//只要还有要做的，就当做没完成
                     newsNum = taskProgress[0].dayMaxScore - taskProgress[0].currentScore;//还需要看多少个新闻
                     console.log("1.看新闻");
@@ -1085,7 +1124,7 @@ async function start() {
                 //检查视频
                 let temp = parseInt(taskProgress[1].dayMaxScore - taskProgress[1].currentScore);
                 let temp2 = parseInt(taskProgress[3].dayMaxScore - taskProgress[3].currentScore);
-                if (settings[1] && (temp != 0 || temp2 != 0)) {
+                if (settings.Video && (temp != 0 || temp2 != 0)) {
                     tasks[1] = false;//只要还有要做的，就当做没完成
                     videoNum = temp > temp2 ? temp : temp2;//还需要看多少个视频
                     console.log("2.看视频");
@@ -1095,7 +1134,7 @@ async function start() {
                 }
 
                 //检查每日答题
-                if (settings[6] && taskProgress[6].currentScore != taskProgress[6].dayMaxScore) {
+                if (settings.ExamPractice && taskProgress[6].currentScore != taskProgress[6].dayMaxScore) {
                     tasks[2] = false;//只要还有要做的，就当做没完成
                     console.log("3.做每日答题");
                     await doExamPractice();
@@ -1104,7 +1143,7 @@ async function start() {
                 }
 
                 //检查每周答题
-                if (settings[2] && taskProgress[2].currentScore == 0) {
+                if (settings.ExamWeekly && taskProgress[2].currentScore == 0) {
                     tasks[3] = false;//只要还有要做的，就当做没完成
                     console.log("4.做每周答题");
                     let result = await doExamWeekly();
@@ -1117,7 +1156,7 @@ async function start() {
                 }
 
                 //检查专项练习
-                if (settings[5] && taskProgress[5].currentScore == 0) {
+                if (settings.ExamPaper && taskProgress[5].currentScore == 0) {
                     tasks[4] = false;//只要还有要做的，就当做没完成
                     console.log("5.做专项练习");
                     let result = await doExamPaper();
@@ -1142,12 +1181,19 @@ async function start() {
         console.log("已完成")
         startButton.innerText = "已完成";
         startButton.style.color = "#c7c7c7";
-        if (settings[7]) {
+        if (settings.ShowMenu) {
             showMenu()
         }
     } else {
-        //提醒登录
-        alert("请先登录");
+        //提醒登录 
+        // alert("请先登录");
+
+        //修改为跳转到登陆页
+        let loggedButton = document.querySelectorAll("a[class='icon login-icon']")[0];
+        loggedButton.click()
+        setTimeout(() => {
+            closeWin()
+        }, 2000);
     }
     return false;
 }
