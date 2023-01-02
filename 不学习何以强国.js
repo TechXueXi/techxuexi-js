@@ -1123,7 +1123,7 @@ async function start() {
 
                 //检查视频
                 let temp = parseInt(taskProgress[1].dayMaxScore - taskProgress[1].currentScore);
-                let temp2 = parseInt(taskProgress[3].dayMaxScore - taskProgress[3].currentScore);
+                let temp2 = parseInt(taskProgress[2].dayMaxScore - taskProgress[2].currentScore);
                 if (settings.Video && (temp != 0 || temp2 != 0)) {
                     tasks[1] = false;//只要还有要做的，就当做没完成
                     videoNum = temp > temp2 ? temp : temp2;//还需要看多少个视频
@@ -1134,14 +1134,15 @@ async function start() {
                 }
 
                 //检查每日答题
-                if (settings.ExamPractice && taskProgress[6].currentScore != taskProgress[6].dayMaxScore) {
+                if (settings.ExamPractice && taskProgress[5].currentScore != taskProgress[5].dayMaxScore) {
                     tasks[2] = false;//只要还有要做的，就当做没完成
                     console.log("3.做每日答题");
                     await doExamPractice();
                 } else {
                     tasks[2] = true;
                 }
-
+                tasks[3] = true
+                /*
                 //检查每周答题
                 if (settings.ExamWeekly && taskProgress[2].currentScore == 0) {
                     tasks[3] = false;//只要还有要做的，就当做没完成
@@ -1153,10 +1154,10 @@ async function start() {
                     }
                 } else {
                     tasks[3] = true;
-                }
+                }*/
 
                 //检查专项练习
-                if (settings.ExamPaper && taskProgress[5].currentScore == 0) {
+                if (settings.ExamPaper && taskProgress[4].currentScore == 0) {
                     tasks[4] = false;//只要还有要做的，就当做没完成
                     console.log("5.做专项练习");
                     let result = await doExamPaper();
@@ -1185,7 +1186,7 @@ async function start() {
             showMenu()
         }
     } else {
-        //提醒登录 
+        //提醒登录
         // alert("请先登录");
 
         //修改为跳转到登陆页
