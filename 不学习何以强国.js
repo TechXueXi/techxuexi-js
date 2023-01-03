@@ -1115,10 +1115,10 @@ async function start() {
                 let eggSettingItems = document.getElementsByClassName("egg_setting_item");
                 console.log(eggSettingItems[0].children[0].innerHTML);
                 eggSettingItems[0].children[0].innerHTML += ' ' + taskProgress[0].currentScore + '/' + taskProgress[0].dayMaxScore;
-                eggSettingItems[1].children[0].innerHTML += ' ' + taskProgress[1].currentScore+ '/' + taskProgress[1].dayMaxScore;
-                eggSettingItems[2].children[0].innerHTML += ' ' + taskProgress[5].currentScore+ '/' + taskProgress[5].dayMaxScore;
-                eggSettingItems[3].children[0].innerHTML += ' ' + taskProgress[4].currentScore+ '/' + taskProgress[4].dayMaxScore;
-
+                eggSettingItems[1].children[0].innerHTML += ' ' + ( taskProgress[1].currentScore + taskProgress[2].currentScore ) + '/' + ( taskProgress[1].dayMaxScore + taskProgress[2].dayMaxScore );
+                eggSettingItems[2].children[0].innerHTML += ' ' + taskProgress[5].currentScore + '/' + taskProgress[5].dayMaxScore;
+                eggSettingItems[3].children[0].innerHTML += ' ' + taskProgress[4].currentScore + '/' + taskProgress[4].dayMaxScore;
+                
                 //检查新闻
                 if (settings.News && taskProgress[0].currentScore != taskProgress[0].dayMaxScore) {
                     tasks[0] = false;//只要还有要做的，就当做没完成
