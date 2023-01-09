@@ -94,6 +94,35 @@ function closeWin() {
 
 }
 
+/**  模拟鼠标移动  改方法来自https://blog.csdn.net/Wuzihui___/article/details/79952068
+ * @param id
+ * @param clientX  相对窗口横坐标
+ * @param clientY  相对窗口纵坐标
+ * @param distance 滑动距离
+ */
+function  dragandDrop(btn_hk, clientX, clientY, distance) {
+    var elem = btn_hk,
+        k = 0,
+        interval;
+    iME(elem,"mousedown",0, 0, clientX, clientY);
+    interval = setInterval(function() {
+        k++;
+        iter(k);
+        if (k === distance) {
+            clearInterval(interval);
+            iME(elem,"mouseup",clientX + k, clientY, 220 + k, 400);
+        }
+    }, 10);
+    function iter(y) {
+        iME(elem,"mousemove",clientX + y, clientY, clientX + y, clientY);
+    }
+    function iME(obj,event,screenXArg,screenYArg,clientXArg,clientYArg){
+        var mousemove = document.createEvent("MouseEvent");
+        mousemove.initMouseEvent(event, true, true, unsafeWindow, 0, screenXArg, screenYArg, clientXArg, clientYArg, 0, 0, 0, 0, 0, null);
+        obj.dispatchEvent(mousemove);
+    }
+}
+
 /**
  * 随机等待最小到最大之间几秒, 需要await
  * @param {number} minSecond 最短时长
@@ -701,6 +730,9 @@ async function doingExam() {
         await waitRandomBetween(2, 5);
         await doingPause();
         nextButton = await getNextButton();
+        if(document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
+            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0],0,0,300);
+        }
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
             break;
         }
@@ -1112,13 +1144,14 @@ async function start() {
                 console.log("开始学习")
 
                 // 显示目前得分
+                /*
                 let eggSettingItems = document.getElementsByClassName("egg_setting_item");
                 console.log(eggSettingItems[0].children[0].innerHTML);
                 eggSettingItems[0].children[0].innerHTML += ' ' + taskProgress[0].currentScore + '/' + taskProgress[0].dayMaxScore;
                 eggSettingItems[1].children[0].innerHTML += ' ' + ( taskProgress[1].currentScore + taskProgress[2].currentScore ) + '/' + ( taskProgress[1].dayMaxScore + taskProgress[2].dayMaxScore );
                 eggSettingItems[2].children[0].innerHTML += ' ' + taskProgress[5].currentScore + '/' + taskProgress[5].dayMaxScore;
                 eggSettingItems[3].children[0].innerHTML += ' ' + taskProgress[4].currentScore + '/' + taskProgress[4].dayMaxScore;
-                
+                */
                 //检查新闻
                 if (settings.News && taskProgress[0].currentScore != taskProgress[0].dayMaxScore) {
                     tasks[0] = false;//只要还有要做的，就当做没完成
