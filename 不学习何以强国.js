@@ -251,15 +251,19 @@ function getVideoTag() {
         }
     }
     else {
-        if (iframe) {
-            //如果有iframe,说明外面的video标签是假的
-            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-        } else {
-            //否则这个video标签是真的
-            video = document.getElementsByTagName("video")[0];
-            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
-        }
+        // if (iframe) {
+        //     //如果有iframe,说明外面的video标签是假的
+        //     video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+        //     pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+        // } else {
+        //     //否则这个video标签是真的
+        //     video = document.getElementsByTagName("video")[0];
+        //     pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+        // }
+
+        // 视频播放按钮更新
+        video = document.getElementsByTagName("video")[0];
+        pauseButton = document.getElementsByClassName("prism-big-play-btn")[0];
         return {
             "video": video,
             "pauseButton": pauseButton
