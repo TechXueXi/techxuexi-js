@@ -105,6 +105,7 @@ function  dragandDrop(btn_hk, clientX, clientY, distance) {
         k = 0,
         interval;
     iME(elem,"mousedown",0, 0, clientX, clientY);
+    let waitTime = Math.floor(Math.random() * (0.5 * 1000 - 0.1 * 1000) + 0.1 * 1000)
     interval = setInterval(function() {
         k++;
         iter(k);
@@ -112,7 +113,7 @@ function  dragandDrop(btn_hk, clientX, clientY, distance) {
             clearInterval(interval);
             iME(elem,"mouseup",clientX + k, clientY, 220 + k, 400);
         }
-    }, 10);
+    }, waitTime);
     function iter(y) {
         iME(elem,"mousemove",clientX + y, clientY, clientX + y, clientY);
     }
