@@ -100,7 +100,7 @@ function closeWin() {
  * @param clientY  相对窗口纵坐标
  * @param distance 滑动距离
  */
-function  dragandDrop(btn_hk, clientX, clientY, distance) {
+function dragandDrop(btn_hk, clientX, clientY, distance) {
     var elem = btn_hk,
         k = 0,
         interval;
@@ -111,13 +111,13 @@ function  dragandDrop(btn_hk, clientX, clientY, distance) {
         iter(k);
         if (k === distance) {
             clearInterval(interval);
-            iME(elem,"mouseup",clientX + k, clientY, 220 + k, 400);
+            iME(elem, "mouseup", clientX + k, clientY, 220 + k, 400);
         }
     }, waitTime);
     function iter(y) {
-        iME(elem,"mousemove",clientX + y, clientY, clientX + y, clientY);
+        iME(elem, "mousemove", clientX + y, clientY, clientX + y, clientY);
     }
-    function iME(obj,event,screenXArg,screenYArg,clientXArg,clientYArg){
+    function iME(obj, event, screenXArg, screenYArg, clientXArg, clientYArg) {
         var mousemove = document.createEvent("MouseEvent");
         mousemove.initMouseEvent(event, true, true, unsafeWindow, 0, screenXArg, screenYArg, clientXArg, clientYArg, 0, 0, 0, 0, 0, null);
         obj.dispatchEvent(mousemove);
@@ -236,36 +236,46 @@ function getVideoTag() {
     let video = null;
     let pauseButton = null;
     var u = navigator.userAgent;
-    if (u.indexOf('Mac') > -1) {//Mac
-        if (iframe != null && iframe.innerHTML) {
-            //如果有iframe,说明外面的video标签是假的
-            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-        } else {
-            //否则这个video标签是真的
-            video = document.getElementsByTagName("video")[0];
-            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
-        }
-        return {
-            "video": video,
-            "pauseButton": pauseButton
-        }
+
+    // 视频播放按钮更新
+    video = document.getElementsByTagName("video")[0];
+    pauseButton = document.getElementsByClassName("prism-big-play-btn")[0];
+
+    return {
+        "video": video,
+        "pauseButton": pauseButton
     }
-    else {
-        if (iframe) {
-            //如果有iframe,说明外面的video标签是假的
-            video = iframe.contentWindow.document.getElementsByTagName("video")[0];
-            pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
-        } else {
-            //否则这个video标签是真的
-            video = document.getElementsByTagName("video")[0];
-            pauseButton = document.getElementsByClassName("prism-play-btn")[0];
-        }
-        return {
-            "video": video,
-            "pauseButton": pauseButton
-        }
-    }
+
+    // if (u.indexOf('Mac') > -1) {//Mac
+    //     if (iframe != null && iframe.innerHTML) {
+    //         //如果有iframe,说明外面的video标签是假的
+    //         video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+    //         pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+    //     } else {
+    //         //否则这个video标签是真的
+    //         video = document.getElementsByTagName("video")[0];
+    //         pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+    //     }
+    //     return {
+    //         "video": video,
+    //         "pauseButton": pauseButton
+    //     }
+    // }
+    // else {
+    //     if (iframe) {
+    //         //如果有iframe,说明外面的video标签是假的
+    //         video = iframe.contentWindow.document.getElementsByTagName("video")[0];
+    //         pauseButton = iframe.contentWindow.document.getElementsByClassName("prism-play-btn")[0];
+    //     } else {
+    //         //否则这个video标签是真的
+    //         video = document.getElementsByTagName("video")[0];
+    //         pauseButton = document.getElementsByClassName("prism-play-btn")[0];
+    //     }
+    //     return {
+    //         "video": video,
+    //         "pauseButton": pauseButton
+    //     }
+    // }
 }
 
 //读新闻或者看视频
@@ -731,8 +741,8 @@ async function doingExam() {
         await waitRandomBetween(2, 5);
         await doingPause();
         nextButton = await getNextButton();
-        if(document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
-            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0],0,0,300);
+        if (document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
+            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0], 0, 0, 300);
         }
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
             break;
