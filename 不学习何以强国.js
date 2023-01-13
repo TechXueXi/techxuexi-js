@@ -94,6 +94,10 @@ function closeWin() {
 
 }
 
+async function sleep( timeMS ) {
+    return new Promise( res => setTimeout( res, time ) );
+}
+
 /**  模拟鼠标移动  改方法来自https://blog.csdn.net/Wuzihui___/article/details/79952068
  * @param id
  * @param clientX  相对窗口横坐标
@@ -105,7 +109,7 @@ function dragandDrop(btn_hk, clientX, clientY, distance) {
         k = 0,
         interval;
     iME(elem,"mousedown",0, 0, clientX, clientY);
-    let waitTime = Math.floor(Math.random() * (0.5 * 1000 - 0.1 * 1000) + 0.1 * 1000)
+    let waitTime = Math.floor(Math.random() * (0.005 * 1000 - 0.09 * 1000) + 0.09 * 1000)
     interval = setInterval(function() {
         k++;
         iter(k);
@@ -881,7 +885,6 @@ async function doingExam() {
                     }
                 }
                 if (!hasButton) {
-                    //没找到按钮，随便选一个
                     allbuttons[0].click();
                 }
                 break;
@@ -910,7 +913,11 @@ async function doingExam() {
                     }
                 } else {
                     //没答案，随便选一个
-                    allbuttons[0].click();
+                    try {
+                        allbuttons[0].click();
+                    } catch(e) {
+                        console.log(e);
+                    }
                 }
                 break;
             }
