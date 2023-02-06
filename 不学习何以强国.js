@@ -105,26 +105,27 @@ async function sleep( timeMS ) {
  * @param distance 滑动距离
  */
 function dragandDrop(btn_hk, clientX, clientY, distance) {
-    var elem = btn_hk,
-        k = 0,
-        interval;
-    iME(elem,"mousedown",0, 0, clientX, clientY);
-    let waitTime = Math.floor(Math.random() * (0.005 * 1000 - 0.09 * 1000) + 0.09 * 1000)
+    var elem = btn_hk;
+    var k = 0;
+    var interval;
+    iME(elem,"mousedown", clientX, clientY);
     interval = setInterval(function() {
         k++;
-        iter(k);
+        iME(elem, "mousemove", clientX + k, clientY);
         if (k === distance) {
             clearInterval(interval);
-            iME(elem, "mouseup", clientX + k, clientY, 220 + k, 400);
+            iME(elem, "mouseup", clientX + k, clientY);
         }
-    }, waitTime);
-    function iter(y) {
-        iME(elem, "mousemove", clientX + y, clientY, clientX + y, clientY);
-    }
-    function iME(obj, event, screenXArg, screenYArg, clientXArg, clientYArg) {
-        var mousemove = document.createEvent("MouseEvent");
-        mousemove.initMouseEvent(event, true, true, unsafeWindow, 0, screenXArg, screenYArg, clientXArg, clientYArg, 0, 0, 0, 0, 0, null);
-        obj.dispatchEvent(mousemove);
+    }, 16);
+
+    function iME(obj, event, clientXArg, clientYArg) {
+        var mouseEvent = new MouseEvent(event, {
+            bubbles: true,
+            cancelable: true,
+            clientX: clientXArg,
+            clientY: clientYArg
+        });
+        obj.dispatchEvent(mouseEvent);
     }
 }
 
@@ -745,8 +746,8 @@ async function doingExam() {
         await waitRandomBetween(2, 5);
         await doingPause();
         nextButton = await getNextButton();
-        if (document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
-            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0], 0, 0, 300);
+        if(document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
+            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0],0,0,300);
         }
         if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
             break;
