@@ -24,7 +24,7 @@ var study_css = ".egg_study_btn{outline:0;border:0;position:fixed;top:5px;left:5
 GM_addStyle(study_css);
 //https://www.xuexi.cn/lgdata/3uoe1tg20en0.json
 //查询今日完成情况
-const SearchSocreUrl = "https://pc-proxy-api.xuexi.cn/api/score/days/listScoreProgress?sence=score&deviceType=2";
+const SearchSocreUrl = "https://pc-proxy-api.xuexi.cn/delegate/score/days/listScoreProgress?sence=score&deviceType=2";
 //重要新闻列表（主）
 const NewsUrl1 = "https://www.xuexi.cn/lgdata/1jscb6pu1n2.json";
 //学习时评新闻列表
