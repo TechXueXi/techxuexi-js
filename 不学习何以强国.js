@@ -740,6 +740,16 @@ async function doingExam() {
     let nextButton = null;
     let qNum = 0;//题号,第一题从0开始算
     let shouldSaveAnswer = false;
+    let huakuai = setInterval(function() {
+        // console.log('检测是否有滑块');
+        if (document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
+            console.log("出现滑块验证，等待滑块验证");
+            dragandDrop(document.getElementsByClassName('nc_iconfont btn_slide')[0], 0, 0, 300);
+            // #swiper_valid > div > span > a:nth-child(1)
+        }
+        // console.log('检测是否有刷新');
+        document.querySelector("#swiper_valid > div > span > a:nth-child(1)")?.click();
+    },1000)
     while (true) {
         //先等等再开始做题
         await waitRandomBetween(2, 5);
