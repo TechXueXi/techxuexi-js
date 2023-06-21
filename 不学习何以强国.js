@@ -1193,7 +1193,7 @@ async function start() {
                 }
 
                 //检查每日答题
-                if (settings.ExamPractice && taskProgress[5].currentScore != taskProgress[5].dayMaxScore) {
+                if (settings.ExamPractice && taskProgress[3].currentScore != taskProgress[3].dayMaxScore) {
                     tasks[2] = false;//只要还有要做的，就当做没完成
                     console.log("3.做每日答题");
                     await doExamPractice();
@@ -1214,9 +1214,9 @@ async function start() {
                 } else {
                     tasks[3] = true;
                 }*/
-
+                    task[4] = true;
                 //检查专项练习
-                if (settings.ExamPaper && taskProgress[4].currentScore == 0) {
+                /*if (settings.ExamPaper && taskProgress[4].currentScore == 0) {
                     tasks[4] = false;//只要还有要做的，就当做没完成
                     console.log("5.做专项练习");
                     let result = await doExamPaper();
@@ -1226,7 +1226,7 @@ async function start() {
                     }
                 } else {
                     tasks[4] = true;
-                }
+                }*/
 
                 if (tasks[0] && tasks[1] && tasks[2] && tasks[3] && tasks[4]) {
                     //如果检查都做完了，就不用继续了
