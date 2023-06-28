@@ -1214,7 +1214,7 @@ async function start() {
                 } else {
                     tasks[3] = true;
                 }*/
-                    task[4] = true;
+                    tasks[4] = true;
                 //检查专项练习
                 /*if (settings.ExamPaper && taskProgress[4].currentScore == 0) {
                     tasks[4] = false;//只要还有要做的，就当做没完成
